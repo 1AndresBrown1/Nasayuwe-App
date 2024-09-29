@@ -2,16 +2,23 @@
 include_once __DIR__ . '/../Docentes/header.php';
 include_once __DIR__ . '/../db.php'; // Incluye tu archivo de conexión
 
+// Obtener el ID del usuario
+$usuario_id = $_SESSION['identificacion_usuario']; // Supone que el usuario está autenticado
+
 // Consulta para obtener todos los niveles, lecciones y preguntas de los cursos
 $sql = "
     SELECT c.id AS curso_id, c.titulo AS curso_titulo, n.id AS nivel_id, n.titulo AS nivel_titulo, 
-        l.id AS leccion_id, l.titulo AS leccion_titulo, l.descripcion, l.imagen_url, l.audio_url, l.video_url, l.duracion
+        l.id AS leccion_id, l.titulo AS leccion_titulo, l.descripcion, l.imagen_url, l.audio_url, l.video_url, l.duracion,
+        (SELECT COUNT(*) FROM calificaciones WHERE calificaciones.leccion_id = l.id AND calificaciones.usuario_id = ?) AS leccion_completada
     FROM cursos c
     JOIN niveles n ON n.curso_id = c.id
     JOIN lecciones l ON l.nivel_id = n.id
     ORDER BY c.id, n.id, l.id";
 
-$result = $conexion->query($sql);
+$stmt = $conexion->prepare($sql);
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Crear un array de cursos con sus niveles y lecciones
 $cursos = [];
@@ -50,7 +57,8 @@ if ($result->num_rows > 0) {
                 'imagen_url' => $imagen_url,
                 'video_url' => $video_url,
                 'audio_url' => $audio_url,
-                'duracion' => htmlspecialchars($row['duracion'], ENT_QUOTES, 'UTF-8')
+                'duracion' => htmlspecialchars($row['duracion'], ENT_QUOTES, 'UTF-8'),
+                'leccion_completada' => $row['leccion_completada']
             ];
         }
     }
@@ -130,16 +138,9 @@ if ($result->num_rows > 0) {
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Crear Hilo</button>
                         </form>
 
-                        <h2 class="text-2xl font-bold mb-4">Publicaciones de los Docentes</h2>
-
-
-
+                        <h2 class="text-2xl font-bold mb-4">Publicaciones</h2>
 
                         <?php
-                        // Asegúrate de que el usuario esté autenticado
-                        if (!isset($_SESSION['identificacion_usuario'])) {
-                            die("Acceso denegado. Por favor, inicie sesión.");
-                        }
                         include_once __DIR__ . '/../db.php'; // Incluye tu archivo de conexión
 
                         // Consultar los hilos creados por los docentes
@@ -234,8 +235,6 @@ if ($result->num_rows > 0) {
                             });
                         });
                     </script>
-
-
                 </div>
             </div>
         </div>
@@ -307,6 +306,7 @@ if ($result->num_rows > 0) {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
                 </svg>
                 ${leccion.leccion_titulo}
+                ${leccion.leccion_completada > 0 ? '<span class="ml-2 badge badge-success">Lección Completada</span>' : ''}
             `;
 
             leccionItem.addEventListener('click', () => {
