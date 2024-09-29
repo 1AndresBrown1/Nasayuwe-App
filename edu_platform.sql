@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 26-09-2024 a las 21:05:08
+-- Servidor: localhost
+-- Tiempo de generación: 29-09-2024 a las 22:01:33
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -38,6 +38,29 @@ CREATE TABLE `answer` (
 
 INSERT INTO `answer` (`qid`, `ansid`) VALUES
 ('66c92b9d09d35', '66c92b9d0a5da');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `calificaciones`
+--
+
+CREATE TABLE `calificaciones` (
+  `id` int(11) NOT NULL,
+  `usuario_id` bigint(20) NOT NULL,
+  `leccion_id` int(11) NOT NULL,
+  `nota` decimal(5,2) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `calificaciones`
+--
+
+INSERT INTO `calificaciones` (`id`, `usuario_id`, `leccion_id`, `nota`, `fecha`) VALUES
+(1, 1, 1, 0.00, '2024-09-29 19:29:58'),
+(2, 1, 1, 0.00, '2024-09-29 19:30:12'),
+(3, 1, 1, 0.00, '2024-09-29 19:30:28');
 
 -- --------------------------------------------------------
 
@@ -244,7 +267,9 @@ CREATE TABLE `foro` (
 INSERT INTO `foro` (`id`, `titulo`, `descripcion`, `fecha_creacion`, `creador_id`, `tipo_creador`) VALUES
 (1, 's', 's', '2024-09-22 20:20:53', 1, 'docente'),
 (2, 's', 'jjj', '2024-09-22 20:53:38', 1, 'docente'),
-(3, 'Trucos para aprender Nasayuwe', 'Vamo a aprender...................', '2024-09-22 23:42:56', 1, 'docente');
+(3, 'Trucos para aprender Nasayuwe', 'Vamo a aprender...................', '2024-09-22 23:42:56', 1, 'docente'),
+(4, 'ASDASD', 'test', '2024-09-29 19:00:25', 1, 'docente'),
+(5, 'ASDASD', 'tst', '2024-09-29 19:00:42', 1, 'docente');
 
 -- --------------------------------------------------------
 
@@ -293,7 +318,8 @@ CREATE TABLE `lecciones` (
 
 INSERT INTO `lecciones` (`id`, `nivel_id`, `titulo`, `descripcion`, `imagen_url`, `audio_url`, `duracion`, `video_url`) VALUES
 (1, 1, 'Numeros', 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. At exercitationem, tempore odio voluptatibus eveniet alias aliquid nostrum cum neque non ullam, excepturi mollitia ab voluptatem. Sapiente illo officia culpa deleniti animi est eum et optio maxime, debitis quia? Illum qui ipsum impedit. Ipsum voluptas blanditiis autem eveniet explicabo totam doloremque magnam odit animi? Ratione voluptatum sapiente modi optio repudiandae corrupti accusamus ab obcaecati dolore nisi quibusdam ullam ipsam, earum quos iste molestiae aliquid ducimus magnam, quam aut quisquam quo non harum? Nisi incidunt dolor numquam voluptas, ad assumenda nihil exercitationem, iusto, sit fuga laborum accusamus? Fugit praesentium ducimus quod saepe.', 'uploads/images/maxresdefault.jpg', 'uploads/audios/1.mp3', '1', NULL),
-(2, 1, 'Vocales', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum accusamus, ipsam dicta possimus, iure commodi? Vero, beatae quo?', NULL, NULL, '1', 'uploads/videos/dede.mp4');
+(2, 1, 'Vocales', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum accusamus, ipsam dicta possimus, iure commodi? Vero, beatae quo?', NULL, NULL, '1', 'uploads/videos/dede.mp4'),
+(3, 2, 'Personas', 'Tes', 'uploads/images/nasa_1.png', 'uploads/audios/27_9_2024, 9_18_17 p. m. - Audio - andresd.webm', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -313,7 +339,8 @@ CREATE TABLE `niveles` (
 --
 
 INSERT INTO `niveles` (`id`, `curso_id`, `titulo`, `descripcion`) VALUES
-(1, 1, 'Parte 1', NULL);
+(1, 1, 'Parte 1', NULL),
+(2, 1, 'Parte 2', NULL);
 
 -- --------------------------------------------------------
 
@@ -351,16 +378,34 @@ CREATE TABLE `preguntas_leccion` (
   `opcion2` text NOT NULL,
   `opcion3` text NOT NULL,
   `opcion4` text NOT NULL,
-  `correcta` enum('1','2','3','4') NOT NULL
+  `correcta` enum('1','2','3','4') NOT NULL,
+  `porcentaje` decimal(5,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `preguntas_leccion`
 --
 
-INSERT INTO `preguntas_leccion` (`id`, `leccion_id`, `pregunta`, `opcion1`, `opcion2`, `opcion3`, `opcion4`, `correcta`) VALUES
-(1, 1, 'Selecciona la pregunta correcta', 'Op 1', 'Op 2', 'Op 3', 'Op 4', '4'),
-(2, 2, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum accusamus, ipsam dicta possimus, iure commodi? Vero, beatae quo?', 'Lorem ipsum?', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum ', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum accusamus, ipsam dicta possimus, iure commodi? Vero, beatae quo?', 'Lorem ipsum dolor sit', '3');
+INSERT INTO `preguntas_leccion` (`id`, `leccion_id`, `pregunta`, `opcion1`, `opcion2`, `opcion3`, `opcion4`, `correcta`, `porcentaje`) VALUES
+(1, 1, 'Selecciona la pregunta correcta', 'Op 1', 'Op 2', 'Op 3', 'Op 4', '4', 0.00),
+(2, 2, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum accusamus, ipsam dicta possimus, iure commodi? Vero, beatae quo?', 'Lorem ipsum?', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum ', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum accusamus, ipsam dicta possimus, iure commodi? Vero, beatae quo?', 'Lorem ipsum dolor sit', '3', 0.00),
+(3, 3, 'Pregunta personas', '1', '2', '3', '4', '1', 0.00);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `preguntas_respuestas`
+--
+
+CREATE TABLE `preguntas_respuestas` (
+  `id` int(11) NOT NULL,
+  `leccion_id` int(11) NOT NULL,
+  `usuario_id` bigint(20) NOT NULL,
+  `tipo_usuario` enum('docente','estudiante') NOT NULL,
+  `contenido` text NOT NULL,
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `respuesta_a` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -508,6 +553,14 @@ INSERT INTO `video_alf` (`video_id`, `video_name`, `location`, `descripcion`, `c
 --
 
 --
+-- Indices de la tabla `calificaciones`
+--
+ALTER TABLE `calificaciones`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `leccion_id` (`leccion_id`),
+  ADD KEY `usuario_id` (`usuario_id`);
+
+--
 -- Indices de la tabla `comentarios`
 --
 ALTER TABLE `comentarios`
@@ -575,6 +628,15 @@ ALTER TABLE `preguntas_leccion`
   ADD KEY `leccion_id` (`leccion_id`);
 
 --
+-- Indices de la tabla `preguntas_respuestas`
+--
+ALTER TABLE `preguntas_respuestas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `leccion_id` (`leccion_id`),
+  ADD KEY `usuario_id` (`usuario_id`),
+  ADD KEY `respuesta_a` (`respuesta_a`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -595,6 +657,12 @@ ALTER TABLE `video_alf`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `calificaciones`
+--
+ALTER TABLE `calificaciones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarios`
@@ -624,25 +692,31 @@ ALTER TABLE `files_alf`
 -- AUTO_INCREMENT de la tabla `foro`
 --
 ALTER TABLE `foro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `lecciones`
 --
 ALTER TABLE `lecciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `niveles`
 --
 ALTER TABLE `niveles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `preguntas_leccion`
 --
 ALTER TABLE `preguntas_leccion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `preguntas_respuestas`
+--
+ALTER TABLE `preguntas_respuestas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `video`
@@ -659,6 +733,13 @@ ALTER TABLE `video_alf`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `calificaciones`
+--
+ALTER TABLE `calificaciones`
+  ADD CONSTRAINT `calificaciones_ibfk_1` FOREIGN KEY (`leccion_id`) REFERENCES `lecciones` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `calificaciones_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `estudiantes` (`documento_identidad`);
 
 --
 -- Filtros para la tabla `comentarios`
@@ -696,6 +777,14 @@ ALTER TABLE `niveles`
 --
 ALTER TABLE `preguntas_leccion`
   ADD CONSTRAINT `preguntas_leccion_ibfk_1` FOREIGN KEY (`leccion_id`) REFERENCES `lecciones` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `preguntas_respuestas`
+--
+ALTER TABLE `preguntas_respuestas`
+  ADD CONSTRAINT `preguntas_respuestas_ibfk_1` FOREIGN KEY (`leccion_id`) REFERENCES `lecciones` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `preguntas_respuestas_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id_usuario`),
+  ADD CONSTRAINT `preguntas_respuestas_ibfk_3` FOREIGN KEY (`respuesta_a`) REFERENCES `preguntas_respuestas` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

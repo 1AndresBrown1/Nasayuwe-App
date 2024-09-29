@@ -75,10 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_leccion'])) {
             $opcion4 = $_POST['opcion4'];
             $correcta = $_POST['correcta'];
 
-            $sql_pregunta = "INSERT INTO preguntas_leccion (leccion_id, pregunta, opcion1, opcion2, opcion3, opcion4, correcta)
-                             VALUES (?, ?, ?, ?, ?, ?, ?)";
+            // Asignar un porcentaje fijo del 5% para cada pregunta (esto es solo un ejemplo, puedes cambiar la lógica)
+            $porcentaje = 5.00;
+
+            $sql_pregunta = "INSERT INTO preguntas_leccion (leccion_id, pregunta, opcion1, opcion2, opcion3, opcion4, correcta, porcentaje)
+                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt_pregunta = $conexion->prepare($sql_pregunta);
-            $stmt_pregunta->bind_param("issssss", $leccion_id, $pregunta, $opcion1, $opcion2, $opcion3, $opcion4, $correcta);
+            $stmt_pregunta->bind_param("issssssd", $leccion_id, $pregunta, $opcion1, $opcion2, $opcion3, $opcion4, $correcta, $porcentaje);
             if ($stmt_pregunta->execute()) {
                 echo "<p>Pregunta agregada con éxito.</p>";
             } else {
@@ -195,5 +198,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_leccion'])) {
 <?php
 include_once __DIR__ . '/../Docentes/footer.php';
 ?>
-
-

@@ -44,7 +44,8 @@ $routes = [
     'procesar_comentario' => 'App/Docentes/procesar_comentario.php',
     'load_comments' => 'App/Docentes/load_comments.php',
     'admin_cursos' => 'App/Docentes/admin_cursos.php',
-
+    'preguntas' => 'App/Docentes/preguntas.php',
+    'procesar_examen.php' => 'App/Docentes/procesar_examen.php',
 
 
     'index_docente' => 'App/Docentes/index_docente.php',

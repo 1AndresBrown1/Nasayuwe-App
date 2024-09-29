@@ -77,7 +77,7 @@ if (!isset($_SESSION['identificacion_usuario'])) {
             echo '</div>';
 
             // Formulario para agregar un comentario
-            echo '<form action="procesar_comentario.php" method="POST" class="mt-4">';
+            echo '<form action="procesar_comentario" method="POST" class="mt-4">';
             echo '<input type="hidden" name="foro_id" value="' . $row['id'] . '">';
             echo '<textarea name="comentario" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>';
             echo '<button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2">Comentar</button>';
