@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 29-09-2024 a las 22:01:33
+-- Tiempo de generación: 30-09-2024 a las 00:47:09
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -53,15 +53,6 @@ CREATE TABLE `calificaciones` (
   `fecha` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `calificaciones`
---
-
-INSERT INTO `calificaciones` (`id`, `usuario_id`, `leccion_id`, `nota`, `fecha`) VALUES
-(1, 1, 1, 0.00, '2024-09-29 19:29:58'),
-(2, 1, 1, 0.00, '2024-09-29 19:30:12'),
-(3, 1, 1, 0.00, '2024-09-29 19:30:28');
-
 -- --------------------------------------------------------
 
 --
@@ -78,26 +69,6 @@ CREATE TABLE `comentarios` (
   `tipo_usuario` enum('docente','estudiante') NOT NULL,
   `respuesta_a` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `comentarios`
---
-
-INSERT INTO `comentarios` (`id`, `foro_id`, `leccion_id`, `contenido`, `fecha_creacion`, `usuario_id`, `tipo_usuario`, `respuesta_a`) VALUES
-(1, 2, 0, 'test', '2024-09-22 21:23:49', 1, 'docente', NULL),
-(2, 2, 0, 'ss', '2024-09-22 21:24:19', 1, 'docente', NULL),
-(3, 2, 0, 'dd', '2024-09-22 21:32:43', 1, 'docente', NULL),
-(4, 2, 0, 'no', '2024-09-22 21:47:26', 1, 'docente', 1),
-(5, 2, 0, 's', '2024-09-22 22:02:41', 1, 'docente', 4),
-(6, 2, 0, 'si', '2024-09-22 22:16:35', 1, 'docente', 1),
-(7, 2, 0, 'noooo', '2024-09-22 22:58:57', 1, 'docente', 1),
-(8, 1, 0, 's', '2024-09-22 23:39:59', 1, 'docente', NULL),
-(9, 1, 0, 'n', '2024-09-22 23:40:30', 1, 'docente', 8),
-(10, 2, 0, 'nn', '2024-09-22 23:49:34', 1, 'docente', 3),
-(11, 2, 0, 'hola', '2024-09-22 23:49:48', 1, 'docente', 3),
-(12, 3, 0, 'si', '2024-09-23 00:21:11', 1, 'docente', NULL),
-(13, 3, 0, 'di', '2024-09-23 19:38:42', 1, 'docente', 12),
-(14, 2, 0, 'no', '2024-09-23 19:39:03', 1, 'docente', 3);
 
 -- --------------------------------------------------------
 
@@ -117,7 +88,7 @@ CREATE TABLE `cursos` (
 --
 
 INSERT INTO `cursos` (`id`, `titulo`, `descripcion`, `fecha_creacion`) VALUES
-(1, 'Nasayuwe', '', '2024-09-25 01:35:56');
+(1, 'Nasayuwe', 'Aprende todo sobre el idioma Nasayuwe', '2024-09-29 22:19:04');
 
 -- --------------------------------------------------------
 
@@ -265,11 +236,7 @@ CREATE TABLE `foro` (
 --
 
 INSERT INTO `foro` (`id`, `titulo`, `descripcion`, `fecha_creacion`, `creador_id`, `tipo_creador`) VALUES
-(1, 's', 's', '2024-09-22 20:20:53', 1, 'docente'),
-(2, 's', 'jjj', '2024-09-22 20:53:38', 1, 'docente'),
-(3, 'Trucos para aprender Nasayuwe', 'Vamo a aprender...................', '2024-09-22 23:42:56', 1, 'docente'),
-(4, 'ASDASD', 'test', '2024-09-29 19:00:25', 1, 'docente'),
-(5, 'ASDASD', 'tst', '2024-09-29 19:00:42', 1, 'docente');
+(1, 'Ayuda Sobre un tema', 'Necesito ayuda profe', '2024-09-29 22:42:16', 1, 'docente');
 
 -- --------------------------------------------------------
 
@@ -317,9 +284,10 @@ CREATE TABLE `lecciones` (
 --
 
 INSERT INTO `lecciones` (`id`, `nivel_id`, `titulo`, `descripcion`, `imagen_url`, `audio_url`, `duracion`, `video_url`) VALUES
-(1, 1, 'Numeros', 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. At exercitationem, tempore odio voluptatibus eveniet alias aliquid nostrum cum neque non ullam, excepturi mollitia ab voluptatem. Sapiente illo officia culpa deleniti animi est eum et optio maxime, debitis quia? Illum qui ipsum impedit. Ipsum voluptas blanditiis autem eveniet explicabo totam doloremque magnam odit animi? Ratione voluptatum sapiente modi optio repudiandae corrupti accusamus ab obcaecati dolore nisi quibusdam ullam ipsam, earum quos iste molestiae aliquid ducimus magnam, quam aut quisquam quo non harum? Nisi incidunt dolor numquam voluptas, ad assumenda nihil exercitationem, iusto, sit fuga laborum accusamus? Fugit praesentium ducimus quod saepe.', 'uploads/images/maxresdefault.jpg', 'uploads/audios/1.mp3', '1', NULL),
-(2, 1, 'Vocales', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum accusamus, ipsam dicta possimus, iure commodi? Vero, beatae quo?', NULL, NULL, '1', 'uploads/videos/dede.mp4'),
-(3, 2, 'Personas', 'Tes', 'uploads/images/nasa_1.png', 'uploads/audios/27_9_2024, 9_18_17 p. m. - Audio - andresd.webm', '', NULL);
+(2, 1, 'Los colores', 'Aprede como se dicen y se pronuncian los colores en nasayuwe', 'uploads/images/Captura realizada el 2024-09-29 17.22.42.png', 'uploads/audios/amarillo.mp3', '', NULL),
+(3, 2, 'ANIMALES', 'Aprendamos de animales en Nasayuwe', 'uploads/images/Captura realizada el 2024-09-29 17.34.25.png', 'uploads/audios/amarillo.mp3', '', NULL),
+(4, 3, 'Personas', 'Aprendamos sobre personas en nasayuwe', 'uploads/images/Captura realizada el 2024-09-29 17.38.02.png', 'uploads/audios/amarillo.mp3', '', NULL),
+(5, 3, 'Familia', 'Descubre como se pronuncia la familia', 'uploads/images/WhatsApp-Image-2021-09-08-at-6.40.37-AM-1024x461.jpeg', NULL, '', NULL);
 
 -- --------------------------------------------------------
 
@@ -339,8 +307,9 @@ CREATE TABLE `niveles` (
 --
 
 INSERT INTO `niveles` (`id`, `curso_id`, `titulo`, `descripcion`) VALUES
-(1, 1, 'Parte 1', NULL),
-(2, 1, 'Parte 2', NULL);
+(1, 1, 'COLORES ', 'Aprende sobre los colores en Nasayuwe'),
+(2, 1, 'ANIMALES\r\n', 'Aprendamos sobre animales'),
+(3, 1, 'PERSONAS', NULL);
 
 -- --------------------------------------------------------
 
@@ -387,9 +356,10 @@ CREATE TABLE `preguntas_leccion` (
 --
 
 INSERT INTO `preguntas_leccion` (`id`, `leccion_id`, `pregunta`, `opcion1`, `opcion2`, `opcion3`, `opcion4`, `correcta`, `porcentaje`) VALUES
-(1, 1, 'Selecciona la pregunta correcta', 'Op 1', 'Op 2', 'Op 3', 'Op 4', '4', 0.00),
-(2, 2, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum accusamus, ipsam dicta possimus, iure commodi? Vero, beatae quo?', 'Lorem ipsum?', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum ', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt impedit reprehenderit ullam natus exercitationem voluptate optio dolor harum laudantium dolore laborum accusamus, ipsam dicta possimus, iure commodi? Vero, beatae quo?', 'Lorem ipsum dolor sit', '3', 0.00),
-(3, 3, 'Pregunta personas', '1', '2', '3', '4', '1', 0.00);
+(2, 2, 'Como se dice en Nasayuwe el color Amarillo', 'Sxkiitx', 'Çxihme', 'Beh', 'Khûçx', '1', 5.00),
+(3, 3, 'Como se dice Caballo en Nasayuwe', 'Ji’ba', 'Alku', 'Kuçxi', 'Khapx', '1', 5.00),
+(4, 4, 'Como Se dice Profesor en Nasayuwe', 'Kaapiya’sa', 'Kna’sa', 'Ney', 'Luuçx', '1', 5.00),
+(5, 5, 'Como se dice papa En NasaYUwe', 'Ney', 'Piyasa', 'opdw', 'idjs', '1', 5.00);
 
 -- --------------------------------------------------------
 
@@ -662,13 +632,13 @@ ALTER TABLE `video_alf`
 -- AUTO_INCREMENT de la tabla `calificaciones`
 --
 ALTER TABLE `calificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `cursos`
@@ -692,25 +662,25 @@ ALTER TABLE `files_alf`
 -- AUTO_INCREMENT de la tabla `foro`
 --
 ALTER TABLE `foro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `lecciones`
 --
 ALTER TABLE `lecciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `niveles`
 --
 ALTER TABLE `niveles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `preguntas_leccion`
 --
 ALTER TABLE `preguntas_leccion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `preguntas_respuestas`
