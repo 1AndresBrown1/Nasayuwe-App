@@ -17,7 +17,7 @@ include_once __DIR__ . '/../Docentes/header.php';
                             </svg>
                         </center>
 
-                        <h1 class="text-3xl font-semibold  lg:text-4xl hover:text-5xl ease-linear	duration-150">Alfabetización</h1>
+                        <h1 class="text-3xl font-semibold  lg:text-4xl hover:text-5xl ease-linear	duration-150">Computacional</h1>
                         <center>
                             <a href="videos_alf_docente">
                                 <button class="mt-4 flex items-center px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
@@ -38,7 +38,7 @@ include_once __DIR__ . '/../Docentes/header.php';
    
     <!-- Tercer bloque de contenido -->
     <div class="w-full h-full bg-base-200 hover:bg-green-500 ease-linear	duration-300">
-        <a href="nuevos_videos">
+        <a href="admin_cursos">
             <div class="w-full bg-center bg-cover h-full">
                 <div class="flex items-center justify-center w-full h-full">
                     <div class="text-center">
@@ -50,7 +50,7 @@ include_once __DIR__ . '/../Docentes/header.php';
 
                         <h1 class="text-3xl font-semibold  lg:text-4xl hover:text-5xl ease-linear	duration-150">NasaYuwe</h1>
                         <center>
-                            <a href="nasayuwe">
+                            <a href="admin_cursos">
                                 <button class="mt-4 flex items-center px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                                         <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z" clip-rule="evenodd" />

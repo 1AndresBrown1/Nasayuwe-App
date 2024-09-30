@@ -72,6 +72,10 @@ $routes = [
     'evaluaciones_estudiantes' => 'App/Estudiantes/evaluaciones_estudiantes.php',
     'account_estudiante' => 'App/Estudiantes/account_estudiante.php',
     'update_estudiante' => 'App/Estudiantes/update_estudiante.php',
+    'curso' => 'App/Estudiantes/curso.php',
+    'preguntas_e' => 'App/Estudiantes/preguntas_e.php',
+    'procesar_examen' => 'App/Estudiantes/procesar_examen.php',
+    'procesar_foro_e' => 'App/Estudiantes/procesar_foro_e.php',
 
     // Cursos
 

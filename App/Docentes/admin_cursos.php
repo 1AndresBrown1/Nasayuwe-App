@@ -58,37 +58,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_leccion'])) {
             }
         }
 
-        // Insertar la lección en la base de datos
-        $sql = "INSERT INTO lecciones (nivel_id, titulo, descripcion, imagen_url, audio_url, video_url, duracion) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("issssss", $nivel_id, $titulo, $descripcion, $imagen_url, $audio_url, $video_url, $duracion);
-        if ($stmt->execute()) {
-            $leccion_id = $stmt->insert_id;  // Obtener el ID de la lección recién creada
-            echo "<p>Lección creada con éxito.</p>";
+        // Verificar si ya existe la lección
+        $sql_check_leccion = "SELECT * FROM lecciones WHERE nivel_id = ? AND titulo = ?";
+        $stmt_check_leccion = $conexion->prepare($sql_check_leccion);
+        $stmt_check_leccion->bind_param("is", $nivel_id, $titulo);
+        $stmt_check_leccion->execute();
+        $resultado_leccion = $stmt_check_leccion->get_result();
 
-            // Insertar la pregunta en la base de datos
-            $pregunta = $_POST['pregunta'];
-            $opcion1 = $_POST['opcion1'];
-            $opcion2 = $_POST['opcion2'];
-            $opcion3 = $_POST['opcion3'];
-            $opcion4 = $_POST['opcion4'];
-            $correcta = $_POST['correcta'];
-
-            // Asignar un porcentaje fijo del 5% para cada pregunta (esto es solo un ejemplo, puedes cambiar la lógica)
-            $porcentaje = 5.00;
-
-            $sql_pregunta = "INSERT INTO preguntas_leccion (leccion_id, pregunta, opcion1, opcion2, opcion3, opcion4, correcta, porcentaje)
-                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt_pregunta = $conexion->prepare($sql_pregunta);
-            $stmt_pregunta->bind_param("issssssd", $leccion_id, $pregunta, $opcion1, $opcion2, $opcion3, $opcion4, $correcta, $porcentaje);
-            if ($stmt_pregunta->execute()) {
-                echo "<p>Pregunta agregada con éxito.</p>";
-            } else {
-                echo "<p>Error al agregar la pregunta: " . $conexion->error . "</p>";
-            }
+        if ($resultado_leccion->num_rows > 0) {
+            echo "<p>Error: Ya existe una lección con el mismo título en este nivel.</p>";
         } else {
-            echo "<p>Error al crear la lección: " . $conexion->error . "</p>";
+            // Insertar la lección en la base de datos
+            $sql = "INSERT INTO lecciones (nivel_id, titulo, descripcion, imagen_url, audio_url, video_url, duracion) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bind_param("issssss", $nivel_id, $titulo, $descripcion, $imagen_url, $audio_url, $video_url, $duracion);
+            if ($stmt->execute()) {
+                $leccion_id = $stmt->insert_id;  // Obtener el ID de la lección recién creada
+                echo "<script>alert('Lección creada con éxito.');</script>"; // Alerta en el navegador
+
+                // Insertar la pregunta en la base de datos
+                $pregunta = $_POST['pregunta'];
+                $opcion1 = $_POST['opcion1'];
+                $opcion2 = $_POST['opcion2'];
+                $opcion3 = $_POST['opcion3'];
+                $opcion4 = $_POST['opcion4'];
+                $correcta = $_POST['correcta'];
+
+                // Verificar si ya existe la pregunta
+                $sql_check_pregunta = "SELECT * FROM preguntas_leccion WHERE leccion_id = ? AND pregunta = ?";
+                $stmt_check_pregunta = $conexion->prepare($sql_check_pregunta);
+                $stmt_check_pregunta->bind_param("is", $leccion_id, $pregunta);
+                $stmt_check_pregunta->execute();
+                $resultado_pregunta = $stmt_check_pregunta->get_result();
+
+                if ($resultado_pregunta->num_rows > 0) {
+                    echo "<p>Error: Ya existe una pregunta con el mismo texto en esta lección.</p>";
+                } else {
+                    // Asignar un porcentaje fijo del 5% para cada pregunta (esto es solo un ejemplo, puedes cambiar la lógica)
+                    $porcentaje = 5.00;
+
+                    $sql_pregunta = "INSERT INTO preguntas_leccion (leccion_id, pregunta, opcion1, opcion2, opcion3, opcion4, correcta, porcentaje)
+                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    $stmt_pregunta = $conexion->prepare($sql_pregunta);
+                    $stmt_pregunta->bind_param("issssssd", $leccion_id, $pregunta, $opcion1, $opcion2, $opcion3, $opcion4, $correcta, $porcentaje);
+                    if ($stmt_pregunta->execute()) {
+                        echo "<script>alert('Pregunta agregada con éxito.');</script>"; // Alerta para la pregunta
+                    } else {
+                        echo "<p>Error al agregar la pregunta: " . $conexion->error . "</p>"; // Alerta de error
+                    }
+                }
+            } else {
+                echo "<p>Error al crear la lección: " . $conexion->error . "</p>";
+            }
         }
     }
 }
