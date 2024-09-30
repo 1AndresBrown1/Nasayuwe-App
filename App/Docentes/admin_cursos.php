@@ -58,6 +58,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_leccion'])) {
             }
         }
 
+        // Obtener el curso_id a partir del nivel_id seleccionado
+        $nivel_id = $_POST['nivel_id'];
+        $sql_get_curso_id = "SELECT curso_id FROM niveles WHERE id = ?";
+        $stmt_get_curso_id = $conexion->prepare($sql_get_curso_id);
+        $stmt_get_curso_id->bind_param("i", $nivel_id);
+        $stmt_get_curso_id->execute();
+        $result_get_curso_id = $stmt_get_curso_id->get_result();
+        $row_curso_id = $result_get_curso_id->fetch_assoc();
+        $curso_id = $row_curso_id['curso_id'];
+
         // Verificar si ya existe la lección
         $sql_check_leccion = "SELECT * FROM lecciones WHERE nivel_id = ? AND titulo = ?";
         $stmt_check_leccion = $conexion->prepare($sql_check_leccion);
@@ -122,6 +132,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_leccion'])) {
     <!-- Formulario para crear una lección con una pregunta -->
     <form action="" method="POST" enctype="multipart/form-data" class="mb-4">
         <h3 class="text-xl font-bold">Crear una Lección</h3>
+        <div class="mb-4">
+            <label for="curso_id" class="block">Seleccionar Curso:</label>
+            <select id="curso_id" name="curso_id" required class="border rounded w-full py-2 px-3" onchange="cargarNiveles(this.value)"> 
+                <option value="">Selecciona un curso</option>
+                <?php
+                // Mostrar los cursos existentes en un select
+                $result_cursos = $conexion->query("SELECT id, titulo FROM cursos");
+                while ($row_curso = $result_cursos->fetch_assoc()) {
+                    echo "<option value='" . $row_curso['id'] . "'>" . $row_curso['titulo'] . "</option>";
+                }
+                ?>
+            </select>
+        </div>
         <div class="mb-4">
             <label for="nivel_id" class="block">Seleccionar Nivel:</label>
             <select id="nivel_id" name="nivel_id" required class="border rounded w-full py-2 px-3">

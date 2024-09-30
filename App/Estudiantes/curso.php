@@ -4,19 +4,35 @@ include_once __DIR__ . '/../db.php'; // Incluye tu archivo de conexión
 
 // Obtener el ID del usuario
 $usuario_id = $_SESSION['identificacion_usuario']; // Supone que el usuario está autenticado
+// Consulta para obtener todos los cursos disponibles
+$sql_cursos = "SELECT id, titulo FROM cursos";
+$result_cursos = $conexion->query($sql_cursos);
 
-// Consulta para obtener todos los niveles, lecciones y preguntas de los cursos
+// Verificar si se ha seleccionado un curso
+$curso_seleccionado = isset($_GET['curso']) ? $_GET['curso'] : null;
+
+// Consulta para obtener los niveles, lecciones y preguntas del curso seleccionado (o de todos si no se ha seleccionado ninguno)
 $sql = "
     SELECT c.id AS curso_id, c.titulo AS curso_titulo, n.id AS nivel_id, n.titulo AS nivel_titulo, 
         l.id AS leccion_id, l.titulo AS leccion_titulo, l.descripcion, l.imagen_url, l.audio_url, l.video_url, l.duracion,
         (SELECT COUNT(*) FROM calificaciones WHERE calificaciones.leccion_id = l.id AND calificaciones.usuario_id = ?) AS leccion_completada
     FROM cursos c
     JOIN niveles n ON n.curso_id = c.id
-    JOIN lecciones l ON l.nivel_id = n.id
-    ORDER BY c.id, n.id, l.id";
+    JOIN lecciones l ON l.nivel_id = n.id ";
+
+if ($curso_seleccionado) {
+    $sql .= " WHERE c.id = ?";
+}
+
+$sql .= " ORDER BY c.id, n.id, l.id";
 
 $stmt = $conexion->prepare($sql);
-$stmt->bind_param("i", $usuario_id);
+
+if ($curso_seleccionado) {
+    $stmt->bind_param("ii", $usuario_id, $curso_seleccionado);
+} else {
+    $stmt->bind_param("i", $usuario_id);
+}
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -65,6 +81,19 @@ if ($result->num_rows > 0) {
 }
 ?>
 
+<form method="get">
+    <label for="curso">Selecciona un curso:</label>
+    <select class="select select-bordered w-full max-w-xs mx-3" id="curso" name="curso">
+        <?php
+        while ($row_curso = $result_cursos->fetch_assoc()) {
+            $selected = ($curso_seleccionado == $row_curso['id']) ? 'selected' : '';
+            echo "<option value='{$row_curso['id']}' $selected>{$row_curso['titulo']}</option>";
+        }
+        ?>
+    </select>
+    <button class="btn" type="submit">Filtrar</button>
+</form>
+
 <div class="p-4">
     <!-- Sección para mostrar los niveles como pasos (steps) -->
     <div class="niveles-steps mb-6">
@@ -88,7 +117,7 @@ if ($result->num_rows > 0) {
         <div style="height: 660px;" class="mockup-window bg-base-300  border">
             <div id="media-container">
                 <img id="section-image" src="" alt="Imagen de la lección" class="w-full  object-contain bg-gray-200" style="display: none;">
-                <video  id="video-player" controls class="video-player" style="display: none; height: 600px;
+                <video id="video-player" controls class="video-player" style="display: none; height: 600px;
     display: block;
     width: 100%;">
                     <source id="video-source" type="video/mp4">
@@ -248,11 +277,20 @@ if ($result->num_rows > 0) {
     const data = <?php echo json_encode($cursos, JSON_UNESCAPED_UNICODE); ?>;
 
     function loadCourseContent() {
+
+        const courseSelect = document.getElementById('curso');
+        const selectedCourseId = courseSelect.value;
+
         const courseSteps = document.getElementById('course-steps');
         const lessonListContainer = document.getElementById('lesson-list-container');
         const lessonList = document.getElementById('lesson-list');
 
-        courseSteps.innerHTML = ''; // Limpiar el contenido antes de recargarlo
+        courseSteps.innerHTML = '';
+        lessonListContainer.style.display = 'none';
+
+        // Obtener el primer curso de los datos
+        const firstCourseId = Object.keys(data)[0];
+        const filteredData = selectedCourseId ? data[selectedCourseId] : data[firstCourseId];
 
         Object.values(data).forEach((curso) => {
             Object.values(curso.niveles).forEach((nivel, nivelIndex) => {
@@ -282,10 +320,11 @@ if ($result->num_rows > 0) {
             });
 
             // Cargar el primer nivel y la primera lección automáticamente al cargar la página
-            const firstNivel = Object.values(curso.niveles)[0];
-            if (firstNivel) {
-                loadLevelAndFirstLesson(firstNivel);
-            }
+            const firstNivel = Object.values(filteredData.niveles)[0];
+        if (firstNivel) {
+            loadLevelAndFirstLesson(firstNivel);
+            lessonListContainer.style.display = 'block'; // Mostrar la lista de lecciones del primer curso
+        }
         });
     }
 
@@ -353,7 +392,11 @@ if ($result->num_rows > 0) {
         resolverPreguntasBtn.href = `preguntas_e?leccion_id=${leccion.leccion_id}`;
     }
 
-    loadCourseContent();
+    // Agregar un event listener al select del curso para recargar el contenido cuando cambie la selección
+    const courseSelect = document.getElementById('curso');
+    courseSelect.addEventListener('change', loadCourseContent);
+
+    loadCourseContent(); 
 </script>
 
 <div class="fixed bottom-0 bg-base-300 right-0 m-4 w-80 max-w-sm overflow-hidden rounded-lg shadow-md sm:bottom-auto sm:top-0 sm:right-0">
